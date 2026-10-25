@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>WhatsApp</title>
+<style>body{font-family:-apple-system,system-ui,sans-serif;margin:0;padding:32px 20px;text-align:center;color:#111}
+a.b{display:block;background:#25d366;color:#fff;text-decoration:none;font-size:18px;font-weight:600;padding:16px;border-radius:12px;margin:24px 0 12px}
+button{font-size:16px;padding:12px 16px;border-radius:12px;border:1px solid #ccc;background:#fff;width:100%}
+.n{font-size:24px;font-weight:600;margin:8px 0}p{color:#555}</style></head><body>
+<p>Открываем WhatsApp…</p>
+<a class="b" id="go" href="#">Открыть WhatsApp</a>
+<p>Если не открылось — напишите на номер:</p>
+<div class="n" id="num"></div>
+<button id="copy">Скопировать номер</button>
+<script>
+// Переадресация в приложение WhatsApp напрямую: сайт wa.me в РФ заблокирован.
+var s = new URLSearchParams(location.search);
+var phone = (s.get('p') || '').replace(/\D/g, '');
+var q = 'phone=' + phone + '&text=' + encodeURIComponent(s.get('t') || '');
+var link = /android/i.test(navigator.userAgent)
+  ? 'intent://send?' + q + '#Intent;scheme=whatsapp;end'
+  : 'whatsapp://send?' + q;
+document.getElementById('num').textContent = '+' + phone;
+document.getElementById('go').href = link;
+document.getElementById('copy').onclick = function () {
+  var b = this;
+  navigator.clipboard.writeText('+' + phone).then(function () { b.textContent = 'Скопировано ✓'; });
+};
+if (phone) location.href = link;
+</script></body></html>
